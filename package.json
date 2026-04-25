@@ -1,0 +1,20 @@
+{
+  "name": "restaurant-pos-v-1",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Mohamedali409/restaurant-pos-inventory-system#readme",
+  "bugs": {
+    "url": "https://github.com/Mohamedali409/restaurant-pos-inventory-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohamedali409/restaurant-pos-inventory-system.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
