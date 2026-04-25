@@ -1,0 +1,4 @@
+// getInventory
+// adjustStock
+// getLowStock
+// getStockHistory
