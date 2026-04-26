@@ -7,3 +7,24 @@
 // createCategoryRoute
 // updateCategoryRoute
 // deleteCategoryRoute
+
+
+
+const express = require("express")
+const { model } = require("mongoose")
+
+const router = express.Router()
+
+
+const [getCategories, getCategoryById, createCategory,updateCategory,deleteCategory ]
+
+
+router.get('/',getCategories)
+router.get('/:id',getCategoryById)
+router.post('/createCategory',createCategory)
+router.put('/updateCategory/:id',updateCategory)
+router.delete('deltecategirt/:id',deleteCategory)
+
+
+
+module.exports = router
