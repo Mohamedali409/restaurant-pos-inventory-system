@@ -14,10 +14,16 @@ const categoryRouter = express.Router();
 
 import * as categoryController from "./category.controller.js";
 
-router.get("/", categoryController.getCategories);
-router.get("/:categoryId", categoryController.getCategoryById);
-router.post("/createCategory", categoryController.createCategory);
-router.put("/updateCategory/:categoryId", categoryController.updateCategory);
-router.delete("delete-category/:categoryId", categoryController.deleteCategory);
+categoryRouter.get("/", categoryController.getCategories);
+categoryRouter.get("/:categoryId", categoryController.getCategoryById);
+categoryRouter.post("/createCategory", categoryController.createCategory);
+categoryRouter.put(
+  "/updateCategory/:categoryId",
+  categoryController.updateCategory,
+);
+categoryRouter.delete(
+  "delete-category/:categoryId",
+  categoryController.deleteCategory,
+);
 
 export default categoryRouter;
