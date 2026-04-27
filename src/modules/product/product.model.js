@@ -13,57 +13,46 @@
 // product → orderItems
 // product → stockLogs
 
+import mongoose from "mongoose";
 
+const ProductSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "name is required"],
+    },
+    description: {
+      type: String,
+      required: [true, "description is required"],
+    },
+    price: {
+      type: Number,
+      required: [true, "price is required"],
+    },
+    cost: {
+      type: Number,
+      required: [true, "Cost is required"],
+    },
+    image: {
+      type: String,
+      required: [true],
+    },
+    categoryid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: [true, "Category id is required"],
+    },
+    barcode: {
+      type: String,
+      required: [true, "barcode is required"],
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { timestamps: true },
+);
 
-
-
-
-
-// const mongoose = require ('mongoose');
-
-import mongoose from 'mongoose';
-
-
-const ProductSchema = new mongoose.Schema({
-
-name:{
-    type : String ,
-    required : true ,
-},
-description :{
-    type : String,
-    required:true,
-},
-price:{
-    type: Number,
-    required: true
-},
-cost:{
-    type:Number,
-    required: true
-},
-image:{
-    type:String,
-    required: true
-    
-},
-categoryid:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-},
-barcode:{
-    type:String,
-    required:true,
-},
-isActive:{
-    type:Boolean,
-    default:true
-}
-},
-{timestamps:true}
-
-
-)
-
-module.exports= mongoose.model('Products',ProductSchema);
+const Product =
+  mongoose.models.Products || mongoose.model("Products", cartSchema);
