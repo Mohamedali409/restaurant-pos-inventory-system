@@ -8,23 +8,16 @@
 // updateCategoryRoute
 // deleteCategoryRoute
 
+import express from "express";
 
+const categoryRouter = express.Router();
 
-const express = require("express")
-const { model } = require("mongoose")
+import * as categoryController from "./category.controller.js";
 
-const router = express.Router()
+router.get("/", categoryController.getCategories);
+router.get("/:categoryId", categoryController.getCategoryById);
+router.post("/createCategory", categoryController.createCategory);
+router.put("/updateCategory/:categoryId", categoryController.updateCategory);
+router.delete("delete-category/:categoryId", categoryController.deleteCategory);
 
-
-const [getCategories, getCategoryById, createCategory,updateCategory,deleteCategory ]
-
-
-router.get('/',getCategories)
-router.get('/:id',getCategoryById)
-router.post('/createCategory',createCategory)
-router.put('/updateCategory/:id',updateCategory)
-router.delete('deltecategirt/:id',deleteCategory)
-
-
-
-module.exports = router
+export default categoryRouter;

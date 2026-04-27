@@ -15,7 +15,7 @@
 
 import mongoose from "mongoose";
 
-const ProductSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -37,7 +37,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: [true],
     },
-    categoryid: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: [true, "Category id is required"],
@@ -55,4 +55,6 @@ const ProductSchema = new mongoose.Schema(
 );
 
 const Product =
-  mongoose.models.Products || mongoose.model("Products", cartSchema);
+  mongoose.models.Product || mongoose.model("Product", productSchema);
+
+export default Product;
