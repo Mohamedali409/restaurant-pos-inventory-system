@@ -66,4 +66,8 @@ isActive:{
 
 )
 
-module.exports= mongoose.model('Products',ProductSchema);
+// module.exports= mongoose.model('Products',ProductSchema);
+
+const Products = mongoose.model('Products',ProductSchema);
+
+exports.default= Products

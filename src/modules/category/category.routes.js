@@ -11,12 +11,12 @@
 
 
 const express = require("express")
-const { model } = require("mongoose")
+
 
 const router = express.Router()
 
 
-const [getCategories, getCategoryById, createCategory,updateCategory,deleteCategory ]
+const [getCategories, getCategoryById, createCategory,updateCategory,deleteCategory ] = require("./category.controller")
 
 
 router.get('/',getCategories)
