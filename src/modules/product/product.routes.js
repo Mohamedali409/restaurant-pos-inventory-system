@@ -12,12 +12,17 @@
 
 import express from "express";
 import * as productController from "./product.controller.js";
+import { uploadProductImage } from "../../shared/middleware/multer.js";
 const productRouter = express.Router();
 
 productRouter.get("/", productController.getProduct);
 productRouter.get("/:productId", productController.getProductById);
-productRouter.post("/", productController.createProduct);
-productRouter.put("/:productId", productController.updateProduct);
+productRouter.post("/", uploadProductImage, productController.createProduct);
+productRouter.put(
+  "/:productId",
+  uploadProductImage,
+  productController.updateProduct,
+);
 productRouter.delete("/:productId", productController.deleteProduct);
 
 export default productRouter;

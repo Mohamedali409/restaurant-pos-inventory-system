@@ -10,20 +10,22 @@
 
 import express from "express";
 
-const categoryRouter = express.Router();
-
 import * as categoryController from "./category.controller.js";
+import { uploadCategoryImage } from "../../shared/middleware/multer.js";
+const categoryRouter = express.Router();
 
 categoryRouter.get("/", categoryController.getCategories);
 categoryRouter.get("/:categoryId", categoryController.getCategoryById);
-categoryRouter.post("/createCategory", categoryController.createCategory);
+categoryRouter.post(
+  "/",
+  uploadCategoryImage,
+  categoryController.createCategory,
+);
 categoryRouter.put(
-  "/updateCategory/:categoryId",
+  "/:categoryId",
+  uploadCategoryImage,
   categoryController.updateCategory,
 );
-categoryRouter.delete(
-  "delete-category/:categoryId",
-  categoryController.deleteCategory,
-);
+categoryRouter.delete("/:categoryId", categoryController.deleteCategory);
 
 export default categoryRouter;

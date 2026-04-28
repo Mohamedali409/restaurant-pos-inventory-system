@@ -9,6 +9,10 @@ export const findCategories = () => {
   return Category.find({});
 };
 
+export const findCategoryByName = (categoryName) => {
+  return Category.findOne({ name: categoryName });
+};
+
 export const findCategoryById = (categoryId) => {
   return Category.findById(categoryId);
 };

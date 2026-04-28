@@ -31,8 +31,9 @@ const getProductById = asyncHandler(async (req, res, next) => {
 });
 
 const createProduct = asyncHandler(async (req, res, next) => {
-  const { name, description, price, cost, image, categoryId, barcode } =
-    req.body;
+  const { name, description, price, cost, categoryId, barcode } = req.body;
+
+  const image = req.file?.filename;
 
   const data = { name, description, price, cost, image, categoryId, barcode };
 
@@ -46,9 +47,12 @@ const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 const updateProduct = asyncHandler(async (req, res, next) => {
+  const { name, description, price, cost, categoryId, barcode } = req.body;
+  const image = req.file?.filename;
+  const data = { name, description, price, cost, categoryId, barcode, image };
   const product = await productService.updateProduct(
     req.params.productId,
-    req.body,
+    data,
   );
 
   res.status(201).json({

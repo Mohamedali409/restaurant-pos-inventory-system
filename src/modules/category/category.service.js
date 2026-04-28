@@ -14,16 +14,16 @@ export const getCategoriesService = async () => {
   return category;
 };
 
-export const createCategoryService = async (categoryId, data) => {
-  const category = await categoryService.findCategoryById(categoryId);
+export const createCategoryService = async (data) => {
+  const category = await categoryService.findCategoryByName(data.name);
 
-  if (!category) throw new AppError("Cant find category", 401);
+  if (category) throw new AppError("Category is already exists", 400);
 
   const createCategory = await categoryService.createCategory(data);
 
-  if (!createCategory) throw new AppError("Can't Create Category", 401);
+  if (!createCategory) throw new AppError("Can't create category", 400);
 
-  return createCategory;
+  return category;
 };
 
 export const updateCategoryService = async (categoryId, data) => {
