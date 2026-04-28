@@ -13,16 +13,31 @@
 import express from "express";
 import * as productController from "./product.controller.js";
 import { uploadProductImage } from "../../shared/middleware/multer.js";
+import { protect } from "../../shared/middleware/auth.middleware.js";
+import allowTo from "../../shared/middleware/role.middleware.js";
 const productRouter = express.Router();
 
 productRouter.get("/", productController.getProduct);
 productRouter.get("/:productId", productController.getProductById);
-productRouter.post("/", uploadProductImage, productController.createProduct);
+productRouter.post(
+  "/",
+  protect,
+  allowTo("admin"),
+  uploadProductImage,
+  productController.createProduct,
+);
 productRouter.put(
   "/:productId",
+  protect,
+  allowTo("admin"),
   uploadProductImage,
   productController.updateProduct,
 );
-productRouter.delete("/:productId", productController.deleteProduct);
+productRouter.delete(
+  "/:productId",
+  protect,
+  allowTo("admin"),
+  productController.deleteProduct,
+);
 
 export default productRouter;

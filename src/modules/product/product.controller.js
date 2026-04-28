@@ -6,6 +6,7 @@
 
 // change product Active
 
+import { MESSAGES } from "../../shared/constants/messages.js";
 import asyncHandler from "../../shared/utils/asyncHandler.js";
 import * as productService from "./product.service.js";
 
@@ -14,7 +15,7 @@ const getProduct = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: "All products",
+    message: MESSAGES.PRODUCT_SUCCESS,
     products,
   });
 });
@@ -41,7 +42,7 @@ const createProduct = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: "create product success",
+    message: MESSAGES.CREATE_PRODUCT_SUCCESS,
     product,
   });
 });
@@ -57,7 +58,7 @@ const updateProduct = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: "Product update success",
+    message: MESSAGES.UPDATE_PRODUCT_SUCCESS,
     product,
   });
 });
@@ -67,7 +68,7 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: "Product delete success",
+    message: MESSAGES.DELETE_PRODUCT_SUCCESS,
     product,
   });
 });

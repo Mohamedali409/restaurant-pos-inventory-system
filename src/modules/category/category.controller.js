@@ -3,6 +3,7 @@
 // updateCategory;
 // deleteCategory;
 
+import { MESSAGES } from "../../shared/constants/messages.js";
 import asyncHandler from "../../shared/utils/asyncHandler.js";
 import * as categoryService from "./category.service.js";
 
@@ -11,7 +12,7 @@ export const getCategories = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "All Category",
+    message: MESSAGES.GET_ALL_CATEGORY,
     category,
   });
 });
@@ -29,7 +30,7 @@ export const createCategory = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    message: "Category created successfully",
+    message: MESSAGES.GET_CATEGORY_SUCCESS,
     category,
   });
 });
@@ -68,7 +69,7 @@ export const updateCategory = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: "Category updated successfully",
+    message: MESSAGES.GET_CATEGORY_SUCCESS,
     category,
   });
 });
@@ -80,6 +81,6 @@ export const deleteCategory = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: "category is deleted",
+    message: MESSAGES.DELETE_CATEGORY_SUCCESS,
   });
 });

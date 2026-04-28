@@ -11,6 +11,7 @@
 // logoutUser
 // getCurrentUser
 
+import { MESSAGES } from "../../shared/constants/messages.js";
 import AppError from "../../shared/utils/AppError.js";
 import asyncHandler from "../../shared/utils/asyncHandler.js";
 import { generateToken } from "../../shared/utils/generateToken.js";
@@ -19,7 +20,7 @@ import * as userRepository from "../user/user.repository.js";
 export const createNewUser = async (data) => {
   const user = await userRepository.getUserByEmail(data.email);
   if (user) {
-    throw new AppError("email is already used");
+    throw new AppError(MESSAGES.EMAIL_USED, 404);
   }
   const newUser = await userRepository.createUser(data);
 
@@ -31,7 +32,7 @@ export const createNewUser = async (data) => {
 export const loginUser = async (email, password) => {
   const user = await userRepository.getUserByEmail(email);
   if (!user) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError(MESSAGES.INVALID_LOGIN, 401);
   }
   const token = generateToken(user);
 
