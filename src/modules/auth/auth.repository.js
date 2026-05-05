@@ -2,10 +2,10 @@
 // createUser
 // findUserById
 
-import User from "../user/user.model";
+import User from "../user/user.model.js";
 
 export const findUserByEmail = (email) => {
-  return User.findOne(email);
+  return User.findOne({ email });
 };
 
 export const createUser = (data) => {

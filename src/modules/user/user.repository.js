@@ -7,7 +7,7 @@
 import User from "./user.model.js";
 
 export const findUsers = () => {
-  return User.find();
+  return User.find({});
 };
 
 export const findUserById = (userId) => {
