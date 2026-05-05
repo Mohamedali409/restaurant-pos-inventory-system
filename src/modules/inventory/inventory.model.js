@@ -4,7 +4,7 @@
 // updatedAt
 
 // inventory → product (one-to-one)
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const inventorySchema = new mongoose.Schema(
   {
@@ -33,7 +33,7 @@ const inventorySchema = new mongoose.Schema(
 inventorySchema.index({ productId: 1 });
 inventorySchema.index({ currentStock: 1 });
 
-inventorySchema.virtual("isLowStock").get(() => {
+inventorySchema.virtual("isLowStock").get(function () {
   return this.currentStock <= this.reorderLevel;
 });
 

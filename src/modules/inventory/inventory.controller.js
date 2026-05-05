@@ -1,4 +1,8 @@
 // getInventory
-// adjustStock
+// getInventoryByProduct
 // getLowStock
-// getStockHistory
+// getOutOfStock
+// adjustStock
+// deductStock
+// restoreStock
+// updateReorderLevel
