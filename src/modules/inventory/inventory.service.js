@@ -3,6 +3,8 @@
 // يعرفك عندك كام قطعة
 
 // getInventoryService
+// getInventoryByProductService
 // adjustStockService
 // getLowStockService
-// getStockHistoryService
+// getOutOfStockService
+// updateReorderLevelService

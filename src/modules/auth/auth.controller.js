@@ -12,9 +12,7 @@ const userRegister = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   const data = { name, email, password };
 
-  const newUser = await authService.createNewUser(data);
-
-  const token = generateToken(newUser);
+  const { newUser, token } = await authService.createNewUser(data);
 
   const { password: pwd, ...userData } = newUser.toObject();
 
