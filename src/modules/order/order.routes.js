@@ -10,12 +10,20 @@
 // refundOrderRoute
 // updateOrderStatusRoute
 
-import express from "express";
-import * as order from "./order.controller.js"
-const router = express.Router();
-router.post("/",order.createOrder)
-router.get("/",order.getOrders)
-router.get("/:id",order.getOrderById)
-router.post("/:id/refund",order.refundOrder)
-router.put("/:id/status",order.updateOrderStatus)
-export default router
+import express, { Router } from "express";
+import * as orderController from "./order.controller.js";
+
+const orderRouter = express.Router();
+
+orderRouter.post("/", orderController.createOrder);
+
+orderRouter.get("/", orderController.getOrders);
+orderRouter.get("/:orderId", orderController.getOrderById);
+
+orderRouter.patch("/:orderId/cancel", orderController.cancelOrder);
+orderRouter.patch("/:orderId/status", orderController.changeOrderStatus);
+orderRouter.patch("/:orderId/complete", orderController.completeOrder);
+
+orderRouter.patch("/orderId/pay-cash", orderController.payOrderCash);
+
+export default orderRouter;
