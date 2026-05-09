@@ -8,6 +8,7 @@
 // deleteProductService
 // getProductByIdService
 
+import logger from "../../shared/utils/logger.js";
 import { MESSAGES } from "../../shared/constants/messages.js";
 import AppError from "../../shared/utils/AppError.js";
 import * as productRepository from "./product.repository.js";
@@ -15,6 +16,7 @@ import * as productRepository from "./product.repository.js";
 const getProduct = async () => {
   const product = await productRepository.findProducts();
   if (!product) throw new AppError(MESSAGES.PRODUCT_NOTFOUND, 404);
+ 
   return product;
 };
 
@@ -30,7 +32,9 @@ const createProduct = async (data) => {
   const newProduct = await productRepository.createProduct(data);
 
   if (!newProduct) throw new AppError(MESSAGES.PRODUCT_CREATE_NOT_SUCCESS, 404);
-
+   logger.info(`${MESSAGES.CREATE_PRODUCT_SUCCESS}: ${newProduct.name}`, {
+    module: "product",
+  });
   return newProduct;
 };
 
