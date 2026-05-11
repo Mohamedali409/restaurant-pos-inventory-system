@@ -1,11 +1,8 @@
-export const errorHandling = async (err, req, res, next) => {
-  console.log(err.stack);
-  const statusCode = err.statusCode || 500;
-   logger.error(`${req.method} ${req.originalUrl} ${statusCode} - ${err.message}/n`);
+export const errorHandling = (err, req, res, next) => {
+  console.error(err);
 
-  res.status(statusCode).json({
+  return res.status(err.statusCode || 500).json({
     success: false,
-    message: "error message",
-    error: err.message,
+    message: err.message || 'Internal Server Error',
   });
 };

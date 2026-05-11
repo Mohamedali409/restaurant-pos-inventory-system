@@ -5,7 +5,7 @@
 // deleteOrder;
 // change status
 
-import Order from "./order.model.js";
+import Order from './order.model.js';
 
 const createOrder = (orderData) => {
   return Order.create(orderData);
@@ -14,10 +14,7 @@ const createOrder = (orderData) => {
 const findOrders = async ({ page = 1, limit = 10 }) => {
   const skip = (page - 1) * limit;
 
-  const orders = await Order.find({})
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
+  const orders = await Order.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit);
 
   const total = await Order.countDocuments();
 
@@ -25,9 +22,7 @@ const findOrders = async ({ page = 1, limit = 10 }) => {
 };
 
 const findOrderById = (orderId) => {
-  return Order.findById(orderId)
-    .populate("cashierId")
-    .populate("items.productId");
+  return Order.findById(orderId).populate('cashierId').populate('items.productId');
 };
 
 const updateOrder = (orderId, data) => {
@@ -70,16 +65,12 @@ const findOrdersByCashier = (cashierId) => {
 };
 
 const updateOrderStatus = (orderId, status) => {
-  return Order.findByIdAndUpdate(
-    orderId,
-    { status },
-    { new: true, runValidators: true },
-  );
+  return Order.findByIdAndUpdate(orderId, { status }, { new: true, runValidators: true });
 };
 
-const completeOrder = (id) => updateOrderStatus(id, "completed");
+const completeOrder = (id) => updateOrderStatus(id, 'completed');
 
-const cancelOrder = (id) => updateOrderStatus(id, "cancelled");
+const cancelOrder = (id) => updateOrderStatus(id, 'cancelled');
 
 const countOrders = () => Order.countDocuments();
 
@@ -87,11 +78,11 @@ const countOrdersByStatus = (status) => Order.countDocuments({ status });
 
 const sumSales = async () => {
   const result = await Order.aggregate([
-    { $match: { status: "completed" } },
+    { $match: { status: 'completed' } },
     {
       $group: {
         _id: null,
-        totalSales: { $sum: "$total" },
+        totalSales: { $sum: '$total' },
       },
     },
   ]);
@@ -101,13 +92,13 @@ const sumSales = async () => {
 
 const topSellingProducts = async () => {
   return Order.aggregate([
-    { $match: { status: "completed" } },
-    { $unwind: "$items" },
+    { $match: { status: 'completed' } },
+    { $unwind: '$items' },
     {
       $group: {
-        _id: "$items.productId",
-        totalQuantity: { $sum: "$items.quantity" },
-        totalRevenue: { $sum: "$items.subtotal" },
+        _id: '$items.productId',
+        totalQuantity: { $sum: '$items.quantity' },
+        totalRevenue: { $sum: '$items.subtotal' },
       },
     },
     { $sort: { totalQuantity: -1 } },
@@ -118,7 +109,7 @@ const topSellingProducts = async () => {
 const findByTableNumber = (tableNumber) => {
   return Order.find({
     tableNumber,
-    orderType: "dine-in",
+    orderType: 'dine-in',
   });
 };
 
@@ -126,40 +117,40 @@ const findOrdersByType = (type) => {
   return Order.find({ orderType: type });
 };
 
-const findDeliveryOrders = () => findOrdersByType("delivery");
-const findTakeawayOrders = () => findOrdersByType("takeaway");
-const findDineInOrders = () => findOrdersByType("dine-in");
+const findDeliveryOrders = () => findOrdersByType('delivery');
+const findTakeawayOrders = () => findOrdersByType('takeaway');
+const findDineInOrders = () => findOrdersByType('dine-in');
 
 const findOrdersBySearch = (term) => {
   return Order.find({
     $or: [
-      { orderNumber: { $regex: term, $options: "i" } },
-      { customerName: { $regex: term, $options: "i" } },
+      { orderNumber: { $regex: term, $options: 'i' } },
+      { customerName: { $regex: term, $options: 'i' } },
     ],
   });
 };
 
 export {
-  createOrder,
-  findOrders,
-  findOrderById,
-  updateOrder,
-  deleteOrder,
-  findOrdersByStatus,
-  findOrdersByDate,
-  findTodayOrders,
-  findOrdersByCashier,
-  updateOrderStatus,
-  completeOrder,
   cancelOrder,
+  completeOrder,
   countOrders,
   countOrdersByStatus,
+  createOrder,
+  deleteOrder,
+  findByTableNumber,
+  findDeliveryOrders,
+  findDineInOrders,
+  findOrderById,
+  findOrders,
+  findOrdersByCashier,
+  findOrdersByDate,
+  findOrdersBySearch,
+  findOrdersByStatus,
+  findOrdersByType,
+  findTakeawayOrders,
+  findTodayOrders,
   sumSales,
   topSellingProducts,
-  findByTableNumber,
-  findOrdersByType,
-  findDeliveryOrders,
-  findTakeawayOrders,
-  findDineInOrders,
-  findOrdersBySearch,
+  updateOrder,
+  updateOrderStatus,
 };
