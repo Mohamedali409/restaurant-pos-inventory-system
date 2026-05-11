@@ -22,19 +22,28 @@
 // deductStockService
 // refundOrderService
 
-import AppError from "../../shared/utils/AppError.js";
-import * as OrderRepository from "./order.repository.js";
-import * as productRepository from "../product/product.repository.js";
-import { calculateOrderTotal } from "../../shared/utils/calcTotals.js";
-import mongoose from "mongoose";
-import { getNextOrderNumber } from "../counter/counter.reository.js";
+import mongoose from 'mongoose';
+import AppError from '../../shared/utils/AppError.js';
+import { calculateOrderTotal } from '../../shared/utils/calcTotals.js';
+import { getNextOrderNumber } from '../counter/counter.reository.js';
+import * as productRepository from '../product/product.repository.js';
+import * as OrderRepository from './order.repository.js';
 
-const allowedStatuses = ["pending", "preparing", "completed", "cancelled"];
+const allowedStatuses = ['pending', 'preparing', 'completed', 'cancelled'];
 
 const createOrderService = async (orderData) => {
   const orderNumber = await getNextOrderNumber();
+
   const discount = orderData.discount || 0;
   const tax = orderData.tax || 0;
+
+  if (!Array.isArray(orderData.items)) {
+    throw new AppError('items must be an array', 400);
+  }
+
+  if (orderData.items.length === 0) {
+    throw new AppError('Order items are required', 400);
+  }
 
   const itemsWithSnapshot = [];
 
@@ -50,18 +59,19 @@ const createOrderService = async (orderData) => {
       nameSnapshot: product.name,
       priceSnapshot: product.price,
       quantity: item.quantity,
+      subtotal: product.price * item.quantity,
     });
   }
 
-  const { subtotal, total, processedItems } = calculateOrderTotal(
-    itemsWithSnapshot,
+  const { subtotal, total } = calculateOrderTotal({
+    items: itemsWithSnapshot,
     discount,
     tax,
-  );
+  });
 
   const order = await OrderRepository.createOrder({
     ...orderData,
-    items: processedItems,
+    items: itemsWithSnapshot,
     subtotal,
     total,
     orderNumber,
@@ -91,29 +101,29 @@ const getOrdersService = async (query) => {
 
 const getOrderByIdService = async (orderId) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid order ID", 400);
+    throw new AppError('Invalid order ID', 400);
   }
 
   const order = await OrderRepository.findOrderById(orderId);
 
-  if (!order) throw new AppError("Order not found", 404);
+  if (!order) throw new AppError('Order not found', 404);
 
   return order;
 };
 
 const updateOrderService = async (orderId, orderData) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid order ID", 400);
+    throw new AppError('Invalid order ID', 400);
   }
 
   const existingOrder = await OrderRepository.findOrderById(orderId);
 
   if (!existingOrder) {
-    throw new AppError("Order not found", 404);
+    throw new AppError('Order not found', 404);
   }
 
-  if (["completed", "cancelled"].includes(existingOrder.status)) {
-    throw new AppError("Cannot update finalized order", 400);
+  if (['completed', 'cancelled'].includes(existingOrder.status)) {
+    throw new AppError('Cannot update finalized order', 400);
   }
 
   const updatedOrder = await OrderRepository.updateOrder(orderId, orderData);
@@ -123,21 +133,21 @@ const updateOrderService = async (orderId, orderData) => {
 
 const changeOrderStatusService = async (orderId, status) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid order ID", 400);
+    throw new AppError('Invalid order ID', 400);
   }
 
-  const allowedStatuses = ["pending", "preparing", "completed", "cancelled"];
+  const allowedStatuses = ['pending', 'preparing', 'completed', 'cancelled'];
 
   if (!allowedStatuses.includes(status)) {
-    throw new AppError("Invalid order status", 400);
+    throw new AppError('Invalid order status', 400);
   }
 
   const existingOrder = await OrderRepository.findOrderById(orderId);
 
-  if (!existingOrder) throw new AppError("Order not found", 404);
+  if (!existingOrder) throw new AppError('Order not found', 404);
 
-  if (["completed", "cancelled"].includes(existingOrder.status)) {
-    throw new AppError("Cannot update finalized order", 400);
+  if (['completed', 'cancelled'].includes(existingOrder.status)) {
+    throw new AppError('Cannot update finalized order', 400);
   }
 
   const updatedOrder = await OrderRepository.updateOrderStatus(orderId, status);
@@ -147,15 +157,15 @@ const changeOrderStatusService = async (orderId, status) => {
 
 const cancelOrderService = async (orderId) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid order ID", 400);
+    throw new AppError('Invalid order ID', 400);
   }
 
   const existingOrder = await OrderRepository.findOrderById(orderId);
 
-  if (!existingOrder) throw new AppError("Order not found", 404);
+  if (!existingOrder) throw new AppError('Order not found', 404);
 
-  if (["completed", "cancelled"].includes(existingOrder.status)) {
-    throw new AppError("Cannot cancel finalized order", 400);
+  if (['completed', 'cancelled'].includes(existingOrder.status)) {
+    throw new AppError('Cannot cancel finalized order', 400);
   }
   const cancelledOrder = await OrderRepository.cancelOrder(orderId);
 
@@ -164,15 +174,15 @@ const cancelOrderService = async (orderId) => {
 
 const completeOrderService = async (orderId) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid order ID", 400);
+    throw new AppError('Invalid order ID', 400);
   }
 
   const existingOrder = await OrderRepository.findOrderById(orderId);
 
-  if (!existingOrder) throw new AppError("Order not found", 404);
+  if (!existingOrder) throw new AppError('Order not found', 404);
 
-  if (["completed", "cancelled"].includes(existingOrder.status)) {
-    throw new AppError("Cannot complete finalized order", 400);
+  if (['completed', 'cancelled'].includes(existingOrder.status)) {
+    throw new AppError('Cannot complete finalized order', 400);
   }
   const completedOrder = await OrderRepository.completeOrder(orderId);
 
@@ -181,30 +191,30 @@ const completeOrderService = async (orderId) => {
 
 const payOrderCashService = async (orderId) => {
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    throw new AppError("Invalid Order Id", 400);
+    throw new AppError('Invalid Order Id', 400);
   }
 
   const order = await OrderRepository.findOrderById(orderId);
 
   if (!order) {
-    throw new AppError("Order not found", 404);
+    throw new AppError('Order not found', 404);
   }
 
-  if (order.paymentMethod !== "cash") {
-    throw new AppError("This order is not cash payment", 400);
+  if (order.paymentMethod !== 'cash') {
+    throw new AppError('This order is not cash payment', 400);
   }
 
-  if (order.status === "cancelled") {
-    throw new AppError("Cannot pay cancelled order", 400);
+  if (order.status === 'cancelled') {
+    throw new AppError('Cannot pay cancelled order', 400);
   }
 
-  if (order.status === "completed") {
-    throw new AppError("Order already paid", 400);
+  if (order.status === 'completed') {
+    throw new AppError('Order already paid', 400);
   }
 
-  const paidOrder = await OrderRepository.updateOrderStatus(orderId, {
-    status: "completed",
-    paymentStatus: "paid",
+  const paidOrder = await OrderRepository.updateOrder(orderId, {
+    status: 'completed',
+    paymentStatus: 'paid',
   });
 
   return paidOrder;
@@ -213,12 +223,12 @@ const payOrderCashService = async (orderId) => {
 /**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- */
 
 export {
-  createOrderService,
-  getOrdersService,
-  getOrderByIdService,
-  updateOrderService,
-  changeOrderStatusService,
   cancelOrderService,
+  changeOrderStatusService,
   completeOrderService,
+  createOrderService,
+  getOrderByIdService,
+  getOrdersService,
   payOrderCashService,
+  updateOrderService,
 };
