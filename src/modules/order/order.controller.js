@@ -56,6 +56,29 @@ const changeOrderStatus = asyncHandler(async (req, res) => {
   });
 });
 
+const updateOrder = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+
+  const orderUpdated = await OrderService.updateOrderService(orderId);
+
+  res.status(200).json({
+    success: true,
+    message: "Order updated successfully",
+    data: orderUpdated,
+  });
+});
+
+const deleteOrder = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+
+  await OrderService.deleteOrderService(orderId);
+
+  res.status(200).json({
+    success: true,
+    message: "Order deleted successfully",
+  });
+});
+
 const cancelOrder = asyncHandler(async (req, res) => {
   await OrderService.cancelOrderService(req.params.orderId);
 
@@ -77,6 +100,19 @@ const completeOrder = asyncHandler(async (req, res) => {
   });
 });
 
+const searchOrders = asyncHandler(async (req, res) => {
+  const { term } = req.query;
+
+  const orders = await OrderService.searchOrdersService(term);
+
+  res.status(200).json({
+    success: true,
+    message: "Orders fetched successfully",
+    results: orders.length,
+    data: orders,
+  });
+});
+
 const payOrderCash = asyncHandler(async (req, res) => {
   const { orderId } = req.params;
 
@@ -94,9 +130,12 @@ export {
   getOrders,
   getOrderById,
   changeOrderStatus,
+  updateOrder,
   cancelOrder,
   completeOrder,
   payOrderCash,
+  searchOrders,
+  deleteOrder,
 };
 
 /* *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
