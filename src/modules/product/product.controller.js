@@ -32,11 +32,30 @@ const getProductById = asyncHandler(async (req, res, next) => {
 });
 
 const createProduct = asyncHandler(async (req, res, next) => {
-  const { name, description, price, cost, categoryId, barcode } = req.body;
+  const {
+    name,
+    description,
+    price,
+    cost,
+    categoryId,
+    barcode,
+    currentStock,
+    reorderLevel,
+  } = req.body;
 
   const image = req.file?.filename;
 
-  const data = { name, description, price, cost, image, categoryId, barcode };
+  const data = {
+    name,
+    description,
+    price,
+    cost,
+    image,
+    categoryId,
+    barcode,
+    currentStock,
+    reorderLevel,
+  };
 
   const product = await productService.createProduct(data);
 
