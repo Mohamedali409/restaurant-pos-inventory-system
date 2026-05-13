@@ -6,29 +6,44 @@
 
 import User from "./user.model.js";
 
-export const findUsers = () => {
+const findUsers = () => {
   return User.find({});
 };
 
-export const findUserById = (userId) => {
+const findUserById = (userId) => {
   return User.findById(userId);
 };
 
-export const createUser = (data) => {
+const findUserByEmail = (email) => {
+  return User.findOne({ email: email });
+};
+
+const createUser = (data) => {
   return User.create(data);
 };
 
-export const updateUser = (userId, data) => {
+const updateUser = (userId, data) => {
   return User.findByIdAndUpdate(userId, data);
 };
 
-export const deleteUser = (userId) => {
+const deleteUser = (userId) => {
   return User.findByIdAndDelete(userId);
 };
 
-export const getUserByEmail = (email) => {
+const getUserByEmail = (email) => {
   return User.findOne({ email });
 };
-export const getUserByEmailAndSelectPassword = (email) => {
+const getUserByEmailAndSelectPassword = (email) => {
   return User.findOne({ email }).select("-password");
+};
+
+export {
+  findUsers,
+  findUserById,
+  findUserByEmail,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserByEmail,
+  getUserByEmailAndSelectPassword,
 };
