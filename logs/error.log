@@ -4,3 +4,9 @@
 2026-05-11T15:09:59.592Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
 2026-05-11T15:10:04.668Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
 2026-05-11T17:06:07.274Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-13T11:07:28.046Z [error] [general]: POST /api/auth/register 409 - email is already used/n
+2026-05-13T11:09:02.305Z [error] [general]: POST /api/products 500 - Product validation failed: image: Path `image` is required./n
+2026-05-13T11:09:50.151Z [error] [general]: POST /api/order 500 - Order validation failed: cashierId: Cast to ObjectId failed for value "" (type string) at path "cashierId"/n
+2026-05-13T11:10:57.387Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/complete 400 - Cannot complete finalized order/n
+2026-05-13T11:11:03.466Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/cancel 400 - Cannot cancel finalized order/n
+2026-05-13T11:11:07.771Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/pay-cash 400 - Order already paid/n

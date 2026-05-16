@@ -1,0 +1,1705 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Restaurant POS & Inventory System API",
+    "description": "Full-stack Restaurant POS & Inventory System built with **MERN stack** (Node.js, Express, MongoDB).\n\n## Features\n- \ud83d\udd10 Role-based authentication (Admin, Manager, Cashier)\n- \ud83d\uded2 Real-time order processing\n- \ud83d\udce6 Product & category management\n- \ud83c\udfed Inventory & stock tracking\n- \ud83d\udcca Sales reports & analytics\n\n## Authentication\nUse the `/api/auth/login` endpoint to receive a JWT token, then include it as:\n```\nAuthorization: Bearer <token>\n```",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Mohamedali409",
+      "url": "https://github.com/Mohamedali409/restaurant-pos-inventory-system"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development"
+    },
+    {
+      "url": "https://restaurant-pos-inventory-system-mgj.vercel.app",
+      "description": "Production (Vercel)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication \u2013 register and login"
+    },
+    {
+      "name": "Categories",
+      "description": "Product category management"
+    },
+    {
+      "name": "Products",
+      "description": "Menu item / product management"
+    },
+    {
+      "name": "Orders",
+      "description": "Order lifecycle management"
+    },
+    {
+      "name": "Users",
+      "description": "User management and dashboard queries"
+    },
+    {
+      "name": "Inventory",
+      "description": "Stock management (planned)"
+    },
+    {
+      "name": "Reports",
+      "description": "Business intelligence (planned)"
+    },
+    {
+      "name": "Settings",
+      "description": "Restaurant configuration (planned)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0d"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ahmed Mohamed"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "ahmed@restaurant.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "manager", "cashier"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0e"
+          },
+          "name": {
+            "type": "string",
+            "example": "Beverages"
+          },
+          "image": {
+            "type": "string",
+            "example": "beverages.jpg"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0f"
+          },
+          "name": {
+            "type": "string",
+            "example": "Espresso"
+          },
+          "description": {
+            "type": "string",
+            "example": "Rich Italian espresso"
+          },
+          "price": {
+            "type": "number",
+            "example": 25
+          },
+          "cost": {
+            "type": "number",
+            "example": 10
+          },
+          "image": {
+            "type": "string",
+            "example": "espresso.jpg"
+          },
+          "categoryId": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0e"
+          },
+          "barcode": {
+            "type": "string",
+            "example": "1234567890123"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "required": [
+          "productId",
+          "nameSnapshot",
+          "priceSnapshot",
+          "quantity",
+          "subtotal"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0f"
+          },
+          "nameSnapshot": {
+            "type": "string",
+            "example": "Espresso"
+          },
+          "priceSnapshot": {
+            "type": "number",
+            "example": 25
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 2
+          },
+          "subtotal": {
+            "type": "number",
+            "example": 50
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c10"
+          },
+          "orderNumber": {
+            "type": "string",
+            "example": "ORD-0001"
+          },
+          "customerName": {
+            "type": "string",
+            "example": "Walk-in Customer"
+          },
+          "orderType": {
+            "type": "string",
+            "enum": ["dine-in", "takeaway", "delivery"]
+          },
+          "tableNumber": {
+            "type": "integer",
+            "example": 5
+          },
+          "deliveryAddress": {
+            "type": "string",
+            "example": "123 Tahrir St, Cairo"
+          },
+          "phone": {
+            "type": "string",
+            "example": "01012345678"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "subtotal": {
+            "type": "number",
+            "example": 50
+          },
+          "discount": {
+            "type": "number",
+            "example": 0
+          },
+          "tax": {
+            "type": "number",
+            "example": 7
+          },
+          "total": {
+            "type": "number",
+            "example": 57
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": ["cash", "card", "wallet"]
+          },
+          "paymentStatus": {
+            "type": "string",
+            "enum": ["pending", "paid", "failed", "refunded"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "completed", "cancelled", "refund"]
+          },
+          "cashierId": {
+            "type": "string",
+            "example": "665f1a2b3c4d5e6f7a8b9c0d"
+          },
+          "notes": {
+            "type": "string",
+            "example": "No sugar"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid JWT token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Insufficient role permissions",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ahmed Mohamed"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "admin@restaurant.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Admin@1234"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or email already exists"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login and get JWT token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "admin@restaurant.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Admin@1234"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/api/category": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Get all categories",
+        "responses": {
+          "200": {
+            "description": "List of all categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "category": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Create a new category",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.** Uploads category image as multipart/form-data.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Beverages"
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/api/category/{categoryId}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Get category by ID",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category details"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Update a category",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Delete a category",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get all products",
+        "responses": {
+          "201": {
+            "description": "List of products"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Create a product",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.** Upload product image via multipart/form-data.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "description",
+                  "price",
+                  "cost",
+                  "categoryId",
+                  "barcode",
+                  "image"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "cost": {
+                    "type": "number"
+                  },
+                  "categoryId": {
+                    "type": "string"
+                  },
+                  "barcode": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created"
+          }
+        }
+      }
+    },
+    "/api/products/{productId}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get product by ID",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Product details"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Update product",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "cost": {
+                    "type": "number"
+                  },
+                  "barcode": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete product",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/order": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Create a new order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["cashierId", "paymentMethod", "items"],
+                "properties": {
+                  "customerName": {
+                    "type": "string",
+                    "default": "Walk-in Customer"
+                  },
+                  "orderType": {
+                    "type": "string",
+                    "enum": ["dine-in", "takeaway", "delivery"],
+                    "default": "dine-in"
+                  },
+                  "tableNumber": {
+                    "type": "integer",
+                    "description": "Required for dine-in"
+                  },
+                  "deliveryAddress": {
+                    "type": "string",
+                    "description": "Required for delivery"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Required for delivery"
+                  },
+                  "cashierId": {
+                    "type": "string"
+                  },
+                  "paymentMethod": {
+                    "type": "string",
+                    "enum": ["cash", "card", "wallet"]
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/OrderItem"
+                    }
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get all orders",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["pending", "completed", "cancelled", "refund"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated orders list"
+          }
+        }
+      }
+    },
+    "/api/order/search": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Search orders",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching orders"
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get order by ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Orders"],
+        "summary": "Update order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Orders"],
+        "summary": "Delete order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}/status": {
+      "patch": {
+        "tags": ["Orders"],
+        "summary": "Change order status",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["pending", "completed", "cancelled", "refund"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated"
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}/complete": {
+      "patch": {
+        "tags": ["Orders"],
+        "summary": "Complete an order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Order completed"
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}/cancel": {
+      "patch": {
+        "tags": ["Orders"],
+        "summary": "Cancel an order",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order cancelled"
+          }
+        }
+      }
+    },
+    "/api/order/{orderId}/pay-cash": {
+      "patch": {
+        "tags": ["Orders"],
+        "summary": "Pay order with cash",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment recorded"
+          }
+        }
+      }
+    },
+    "/api/users/add-user": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin / Manager only.**",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["admin", "manager", "cashier"],
+                    "default": "cashier"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created"
+          }
+        }
+      }
+    },
+    "/api/users/user/all": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin / Manager only.**",
+        "responses": {
+          "200": {
+            "description": "User list"
+          }
+        }
+      }
+    },
+    "/api/users/user/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details"
+          }
+        }
+      }
+    },
+    "/api/users/user/email/{email}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by email",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          }
+        }
+      }
+    },
+    "/api/users/update-user": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update user data",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["admin", "manager", "cashier"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated"
+          }
+        }
+      }
+    },
+    "/api/users/delete-user": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/users/order/today": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get today's orders",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Today's orders"
+          }
+        }
+      }
+    },
+    "/api/users/order/by-Date": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Find orders by date",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders on that date"
+          }
+        }
+      }
+    },
+    "/api/users/order/all-by-role": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users by role",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["admin", "manager", "cashier"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users filtered by role"
+          }
+        }
+      }
+    },
+    "/api/users/orders/cashier/{cashierId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Find orders by cashier",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cashierId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders by cashier"
+          }
+        }
+      }
+    },
+    "/api/users/product/top-selling": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get top selling products",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Top products list"
+          }
+        }
+      }
+    },
+    "/api/users/order/count": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get total order count",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "responses": {
+          "200": {
+            "description": "Order count"
+          }
+        }
+      }
+    },
+    "/api/users/order/sum-sales": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get total sales sum",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "responses": {
+          "200": {
+            "description": "Sales total"
+          }
+        }
+      }
+    },
+    "/api/inventory": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "Get inventory levels",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inventory list"
+          }
+        }
+      }
+    },
+    "/api/inventory/low-stock": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "Get low stock items",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Low stock products"
+          }
+        }
+      }
+    },
+    "/api/inventory/adjust": {
+      "post": {
+        "tags": ["Inventory"],
+        "summary": "Adjust stock",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["add", "subtract"]
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Stock adjusted"
+          }
+        }
+      }
+    },
+    "/api/inventory/{productId}/history": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "Get stock adjustment history",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stock history log"
+          }
+        }
+      }
+    },
+    "/api/reports/summary": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Sales summary",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sales summary"
+          }
+        }
+      }
+    },
+    "/api/reports/sales-chart": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Sales chart data",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["daily", "weekly", "monthly"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chart data series"
+          }
+        }
+      }
+    },
+    "/api/reports/top-products": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Top products report",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Top products"
+          }
+        }
+      }
+    },
+    "/api/reports/payment-methods": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Payment methods breakdown",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment stats"
+          }
+        }
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "tags": ["Settings"],
+        "summary": "Get restaurant settings",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current settings"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Settings"],
+        "summary": "Update restaurant settings",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "**Admin only.**",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "restaurantName": {
+                    "type": "string"
+                  },
+                  "taxRate": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "default": "EGP"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Settings updated"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1523 @@
+{
+  "info": {
+    "_postman_id": "80f16d61-14f1-4875-8c85-01f39f03af3f",
+    "name": "\ud83c\udf7d\ufe0f Restaurant POS & Inventory System",
+    "description": "Complete API collection for the Restaurant POS & Inventory System.\n\nBuilt with **MERN Stack** (Node.js, Express, MongoDB).\n\n## \ud83d\udd10 Authentication\nSet `base_url` variable to your server URL (e.g., `http://localhost:3000`).\nAfter login, the `token` variable is auto-saved.\n\n## \ud83d\udc65 Roles\n- **Admin** \u2013 Full access\n- **Manager** \u2013 User & report management\n- **Cashier** \u2013 Order management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "\ud83d\udd10 Auth",
+      "description": "Authentication endpoints \u2013 register and login.",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user account.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@restaurant.com\",\n  \"password\": \"Admin@1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const r = pm.response.json();",
+                  "pm.test('Has token', () => pm.expect(r.token).to.be.a('string'));",
+                  "pm.collectionVariables.set('token', r.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login and receive a JWT token. Token is auto-saved to `token` variable.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@restaurant.com\",\n  \"password\": \"Admin@1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "pm.test('Has token', () => pm.expect(r.token).to.be.a('string'));",
+                  "pm.collectionVariables.set('token', r.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "\ud83d\udcc2 Categories",
+      "description": "Manage product categories. Image upload via multipart/form-data.",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category"]
+            },
+            "description": "Returns all categories."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Category By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category", "{{categoryId}}"]
+            },
+            "description": "Fetch a single category by its MongoDB ID."
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Beverages",
+                  "type": "text"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Category image file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category"]
+            },
+            "description": "**Admin only.** Create a new category with an optional image."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const r = pm.response.json();",
+                  "if(r.category && r.category._id) pm.collectionVariables.set('categoryId', r.category._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Hot Beverages",
+                  "type": "text"
+                },
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "New image (optional)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category", "{{categoryId}}"]
+            },
+            "description": "**Admin only.** Update a category."
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category", "{{categoryId}}"]
+            },
+            "description": "**Admin only.** Delete a category by ID.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "\ud83d\udce6 Products",
+      "description": "Manage restaurant products/menu items.",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Returns all active products."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const r = pm.response.json();",
+                  "if(r.products && r.products[0]) pm.collectionVariables.set('productId', r.products[0]._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Fetch a single product by MongoDB ID."
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Espresso",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Rich Italian espresso shot",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "25",
+                  "type": "text"
+                },
+                {
+                  "key": "cost",
+                  "value": "10",
+                  "type": "text"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "{{categoryId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "barcode",
+                  "value": "1234567890123",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Product image file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"]
+            },
+            "description": "**Admin only.** Create a new product with image upload."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const r = pm.response.json();",
+                  "if(r.product && r.product._id) pm.collectionVariables.set('productId', r.product._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Double Espresso",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "35",
+                  "type": "text"
+                },
+                {
+                  "key": "cost",
+                  "value": "15",
+                  "type": "text"
+                },
+                {
+                  "key": "barcode",
+                  "value": "1234567890124",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "New image (optional)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "**Admin only.** Update product details."
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "**Admin only.** Delete a product permanently.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "\ud83d\uded2 Orders",
+      "description": "Full order lifecycle management. Requires authentication.",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/order",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order"]
+            },
+            "description": "Create a new order. `orderType` can be `dine-in`, `takeaway`, or `delivery`.\n\nFor **delivery**: include `deliveryAddress` and `phone`.\nFor **dine-in**: include `tableNumber`.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Ahmed Mohamed\",\n  \"orderType\": \"dine-in\",\n  \"tableNumber\": 5,\n  \"paymentMethod\": \"cash\",\n  \"cashierId\": \"{{userId}}\",\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"nameSnapshot\": \"Espresso\",\n      \"priceSnapshot\": 25,\n      \"quantity\": 2,\n      \"subtotal\": 50\n    }\n  ],\n  \"notes\": \"No sugar\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "if(r.data && r.data._id) pm.collectionVariables.set('orderId', r.data._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order?page=1&limit=10&status=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Filter: pending | completed | cancelled"
+                }
+              ]
+            },
+            "description": "List all orders with pagination and filters.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Order By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}"]
+            },
+            "description": "Fetch full order details by ID.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/search?term=Ahmed",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "search"],
+              "query": [
+                {
+                  "key": "term",
+                  "value": "Ahmed",
+                  "description": "Search keyword"
+                }
+              ]
+            },
+            "description": "Search orders by order number or customer name.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}"]
+            },
+            "description": "Update order details.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}", "status"]
+            },
+            "description": "Change order status. Values: `pending`, `completed`, `cancelled`, `refund`.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Complete Order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}", "complete"]
+            },
+            "description": "Mark an order as completed.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}", "cancel"]
+            },
+            "description": "Cancel a pending order.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pay Order (Cash)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}/pay-cash",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}", "pay-cash"]
+            },
+            "description": "Mark order payment as paid via cash.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Order",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/order/{{orderId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{orderId}}"]
+            },
+            "description": "**Admin only.** Permanently delete an order.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "\ud83d\udc65 Users",
+      "description": "User management and dashboard queries. Most endpoints require Admin or Manager.",
+      "item": [
+        {
+          "name": "Add User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/add-user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "add-user"]
+            },
+            "description": "**Admin/Manager.** Create a new user account with a role.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Cashier\",\n  \"email\": \"cashier@restaurant.com\",\n  \"password\": \"Cashier@1234\",\n  \"role\": \"cashier\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const r = pm.response.json();",
+                  "if(r.usercreate && r.usercreate._id) pm.collectionVariables.set('userId', r.usercreate._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/user/all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "user", "all"]
+            },
+            "description": "**Admin/Manager.** Fetch all registered users.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/user/{{userId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "user", "{{userId}}"]
+            },
+            "description": "**Admin/Manager.** Fetch a specific user by their ID.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User By Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/user/email/cashier@restaurant.com",
+              "host": ["{{base_url}}"],
+              "path": [
+                "api",
+                "users",
+                "user",
+                "email",
+                "cashier@restaurant.com"
+              ]
+            },
+            "description": "**Admin/Manager.** Look up a user by email address.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/update-user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "update-user"]
+            },
+            "description": "**Admin/Manager.** Update user profile or role.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"name\": \"Senior Cashier\",\n  \"role\": \"manager\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/delete-user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "delete-user"]
+            },
+            "description": "**Admin/Manager.** Delete a user account.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Users By Role",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/order/all-by-role?role=cashier",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "order", "all-by-role"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "cashier",
+                  "description": "Role: admin | manager | cashier"
+                }
+              ]
+            },
+            "description": "**Admin/Manager.** Filter users by role.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Today's Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/order/today",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "order", "today"]
+            },
+            "description": "**All roles.** Get all orders placed today.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find Orders By Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/order/by-Date?date=2025-05-12",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "order", "by-Date"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2025-05-12",
+                  "description": "Date in YYYY-MM-DD format"
+                }
+              ]
+            },
+            "description": "**All roles.** Retrieve orders for a specific date.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find Orders By Cashier",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/orders/cashier/{{userId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "orders", "cashier", "{{userId}}"]
+            },
+            "description": "**Admin/Manager.** Get all orders handled by a specific cashier.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Top Selling Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/product/top-selling",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "product", "top-selling"]
+            },
+            "description": "**Admin/Manager.** Returns the top-selling products.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/order/count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "order", "count"]
+            },
+            "description": "**Admin only.** Get total order count.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Sum Sales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/order/sum-sales",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "order", "sum-sales"]
+            },
+            "description": "**Admin only.** Get total sales revenue sum.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "\ud83c\udfed Inventory",
+      "description": "Stock management endpoints. *(Routes planned \u2013 not yet implemented in app.js)*",
+      "item": [
+        {
+          "name": "Get Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/inventory",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inventory"]
+            },
+            "description": "Get current inventory/stock levels for all products.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/inventory/low-stock",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inventory", "low-stock"]
+            },
+            "description": "Returns products that are below the minimum stock threshold.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Adjust Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/inventory/adjust",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inventory", "adjust"]
+            },
+            "description": "Manually adjust stock for a product. `type` can be `add` or `subtract`.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 50,\n  \"type\": \"add\",\n  \"reason\": \"New stock received\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Stock History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/inventory/{{productId}}/history",
+              "host": ["{{base_url}}"],
+              "path": ["api", "inventory", "{{productId}}", "history"]
+            },
+            "description": "Get stock adjustment history for a specific product.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "\ud83d\udcca Reports",
+      "description": "Business intelligence and reporting endpoints. *(Routes planned \u2013 not yet implemented in app.js)*",
+      "item": [
+        {
+          "name": "Sales Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/summary?from=2025-01-01&to=2025-12-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "summary"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2025-01-01",
+                  "description": "Start date"
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-31",
+                  "description": "End date"
+                }
+              ]
+            },
+            "description": "Get a summary of total sales, orders, and revenue for a date range.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sales Chart Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/sales-chart?period=monthly",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "sales-chart"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "monthly",
+                  "description": "Period: daily | weekly | monthly"
+                }
+              ]
+            },
+            "description": "Get time-series data for charting sales trends.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Top Products Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/top-products?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "top-products"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of top products to return"
+                }
+              ]
+            },
+            "description": "Get the best-selling products ranked by quantity sold.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Payment Methods Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reports/payment-methods",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "payment-methods"]
+            },
+            "description": "Breakdown of revenue by payment method (cash, card, wallet).",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "\u2699\ufe0f Settings",
+      "description": "Restaurant configuration settings. *(Routes planned \u2013 not yet implemented in app.js)*",
+      "item": [
+        {
+          "name": "Get Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/settings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "settings"]
+            },
+            "description": "Fetch current restaurant settings (name, tax rate, currency, etc.).",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/settings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "settings"]
+            },
+            "description": "**Admin only.** Update global restaurant settings.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantName\": \"My Restaurant\",\n  \"taxRate\": 14,\n  \"currency\": \"EGP\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
