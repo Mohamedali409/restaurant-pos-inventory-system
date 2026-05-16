@@ -4,7 +4,7 @@
 // updateUserService
 // deleteUserService
 
-import user from "./user.model";
+import user from "./user.model.js";
 import * as orderRepository from "../order/order.repository.js";
 import * as userRepository from "./user.repository.js";
 import mongoose from "mongoose";

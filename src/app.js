@@ -7,6 +7,8 @@ import productRouter from "./modules/product/product.routes.js";
 import inventoryRouter from "./modules/inventory/inventory.routes.js";
 import userRouter from "./modules/user/user.routes.js";
 import { errorHandling } from "./shared/middleware/error.middleware.js";
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
 
 app.use(express.json());
@@ -17,6 +19,10 @@ app.use(
     credentials: true,
   }),
 );
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/upload", express.static(path.join(__dirname, "../uploads")));
 
 //Auth Routers
 // TODO
