@@ -2,11 +2,10 @@
 // loginUser
 // logoutUser
 // getCurrentUser
-import * as authService from "./auth.service.js";
+import * as authService from './auth.service.js';
 
-import { generateToken } from "../../shared/utils/generateToken.js";
-import asyncHandler from "../../shared/utils/asyncHandler.js";
-import { MESSAGES } from "../../shared/constants/messages.js";
+import { MESSAGES } from '../../shared/constants/messages.js';
+import asyncHandler from '../../shared/utils/asyncHandler.js';
 
 const userRegister = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -40,4 +39,4 @@ const userLogin = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { userRegister, userLogin };
+export { userLogin, userRegister };

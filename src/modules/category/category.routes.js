@@ -8,35 +8,36 @@
 // updateCategoryRoute
 // deleteCategoryRoute
 
-import express from "express";
+import express from 'express';
 
-import * as categoryController from "./category.controller.js";
-import { uploadCategoryImage } from "../../shared/middleware/multer.js";
-import { protect } from "../../shared/middleware/auth.middleware.js";
-import allowTo from "../../shared/middleware/role.middleware.js";
+import { protect } from '../../shared/middleware/auth.middleware.js';
+import { uploadCategoryImage } from '../../shared/middleware/multer.js';
+import allowTo from '../../shared/middleware/role.middleware.js';
+import validation from '../../shared/middleware/validation.middleware.js';
+import { categoryValidation } from '../../shared/validators/category.validator.js';
+import * as categoryController from './category.controller.js';
 const categoryRouter = express.Router();
 
-categoryRouter.get("/", categoryController.getCategories);
-categoryRouter.get("/:categoryId", categoryController.getCategoryById);
+categoryRouter.get('/', categoryController.getCategories);
+categoryRouter.get('/:categoryId', categoryController.getCategoryById);
 categoryRouter.post(
-  "/",
+  '/',
   protect,
-  allowTo("admin"),
+  allowTo('admin'),
   uploadCategoryImage,
+  categoryValidation,
+  validation,
   categoryController.createCategory,
 );
 categoryRouter.put(
-  "/:categoryId",
+  '/:categoryId',
   protect,
-  allowTo("admin"),
+  allowTo('admin'),
   uploadCategoryImage,
+  categoryValidation,
+  validation,
   categoryController.updateCategory,
 );
-categoryRouter.delete(
-  "/:categoryId",
-  protect,
-  allowTo("admin"),
-  categoryController.deleteCategory,
-);
+categoryRouter.delete('/:categoryId', protect, allowTo('admin'), categoryController.deleteCategory);
 
 export default categoryRouter;

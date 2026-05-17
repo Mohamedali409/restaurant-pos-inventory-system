@@ -10,28 +10,74 @@
 // refundOrderRoute
 // updateOrderStatusRoute
 
-import express from "express";
-import * as orderController from "./order.controller.js";
-import allowTo from "../../shared/middleware/role.middleware.js";
-import { protect } from "../../shared/middleware/auth.middleware.js";
+import express from 'express';
+
+import { protect } from '../../shared/middleware/auth.middleware.js';
+import allowTo from '../../shared/middleware/role.middleware.js';
+import validation from '../../shared/middleware/validation.middleware.js';
+
+import {
+  cancelOrderValidation,
+  changeOrderStatusValidation,
+  completeOrderValidation,
+  createOrderValidation,
+  deleteOrderValidation,
+  getOrderByIdValidation,
+  payOrderCashValidation,
+  searchOrdersValidation,
+  updateOrderValidation,
+} from '../../shared/validators/order.validator.js';
+
+import * as orderController from './order.controller.js';
 
 const orderRouter = express.Router();
 
 orderRouter.use(protect);
 
-orderRouter.get("/search", orderController.searchOrders);
+orderRouter.get('/search', searchOrdersValidation, validation, orderController.searchOrders);
 
-orderRouter.post("/", orderController.createOrder);
-orderRouter.get("/", orderController.getOrders);
-orderRouter.get("/:orderId", orderController.getOrderById);
-orderRouter.patch("/:orderId", orderController.updateOrder);
+orderRouter.post('/', createOrderValidation, validation, orderController.createOrder);
 
-orderRouter.patch("/:orderId/status", orderController.changeOrderStatus);
-orderRouter.patch("/:orderId/complete", orderController.completeOrder);
-orderRouter.patch("/:orderId/cancel", orderController.cancelOrder);
+orderRouter.get('/', orderController.getOrders);
 
-orderRouter.patch("/:orderId/pay-cash", orderController.payOrderCash);
+orderRouter.get('/:orderId', getOrderByIdValidation, validation, orderController.getOrderById);
 
-orderRouter.delete("/:orderId", allowTo("admin"), orderController.deleteOrder);
+orderRouter.patch('/:orderId', updateOrderValidation, validation, orderController.updateOrder);
+
+orderRouter.patch(
+  '/:orderId/status',
+  changeOrderStatusValidation,
+  validation,
+  orderController.changeOrderStatus,
+);
+
+orderRouter.patch(
+  '/:orderId/complete',
+  completeOrderValidation,
+  validation,
+  orderController.completeOrder,
+);
+
+orderRouter.patch(
+  '/:orderId/cancel',
+  cancelOrderValidation,
+  validation,
+  orderController.cancelOrder,
+);
+
+orderRouter.patch(
+  '/:orderId/pay-cash',
+  payOrderCashValidation,
+  validation,
+  orderController.payOrderCash,
+);
+
+orderRouter.delete(
+  '/:orderId',
+  allowTo('admin'),
+  deleteOrderValidation,
+  validation,
+  orderController.deleteOrder,
+);
 
 export default orderRouter;

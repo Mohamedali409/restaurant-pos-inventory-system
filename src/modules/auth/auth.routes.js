@@ -8,12 +8,15 @@
 // logoutRoute
 // meRoute
 
-import express from "express";
-import { userLogin, userRegister } from "./auth.controller.js";
+import express from 'express';
+
+import validation from '../../shared/middleware/validation.middleware.js';
+import { loginValidation, registerValidation } from '../../shared/validators/auth.validator.js';
+import { userLogin, userRegister } from './auth.controller.js';
 
 const authRouter = express.Router();
 
-authRouter.post("/register", userRegister);
-authRouter.post("/login", userLogin);
+authRouter.post('/register', registerValidation, validation, userRegister);
+authRouter.post('/login', loginValidation, validation, userLogin);
 
 export default authRouter;

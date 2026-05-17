@@ -11,3 +11,15 @@
 2026-05-13T11:11:03.466Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/cancel 400 - Cannot cancel finalized order/n
 2026-05-13T11:11:07.771Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/pay-cash 400 - Order already paid/n
 2026-05-17T10:29:15.247Z [error] [general]: POST /api/category 401 - Not authorized/n
+2026-05-17T15:16:05.683Z [error] [general]: POST /api/auth/register 409 - email is already used/n
+2026-05-17T15:17:18.999Z [error] [general]: POST /api/auth/login 500 - Invalid Login/n
+2026-05-17T15:17:42.695Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T15:42:28.611Z [error] [general]: POST /api/products 500 - Product validation failed: name: name is required/n
+2026-05-17T15:50:57.990Z [error] [general]: POST /api/products 500 - Unexpected field/n
+2026-05-17T15:51:07.847Z [error] [general]: POST /api/products 500 - Unexpected field/n
+2026-05-17T15:51:20.699Z [error] [general]: POST /api/products 500 - Unexpected field/n
+2026-05-17T15:53:25.550Z [error] [general]: POST /api/products 500 - Unexpected field/n
+2026-05-17T15:54:08.658Z [error] [general]: POST /api/products 500 - Unexpected field/n
+2026-05-17T16:15:50.388Z [error] [general]: POST /api/order 500 - Order validation failed: cashierId: Cast to ObjectId failed for value "" (type string) at path "cashierId"/n
+2026-05-17T16:16:24.932Z [error] [general]: POST /api/order 500 - Order validation failed: cashierId: Cast to ObjectId failed for value "" (type string) at path "cashierId"/n
+2026-05-17T16:18:51.700Z [error] [general]: POST /api/order 500 - Order validation failed: paymentStatus: `completed` is not a valid enum value for path `paymentStatus`./n
