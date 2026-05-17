@@ -9,12 +9,12 @@ import userRouter from "./modules/user/user.routes.js";
 import { errorHandling } from "./shared/middleware/error.middleware.js";
 import path from "path";
 import { fileURLToPath } from "url";
+
 const app = express();
 
 app.use(express.json());
 app.use(
   cors({
-    // origin: "https://restaurant-pos-inventory-system.vercel.app",
     origin: "*",
     credentials: true,
   }),
@@ -24,13 +24,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/upload", express.static(path.join(__dirname, "../uploads")));
 
-//Auth Routers
-// TODO
-
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/products", productRouter);
-app.use("/api/order", orderRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/users", userRouter);
 app.use("/api/inventory", inventoryRouter);

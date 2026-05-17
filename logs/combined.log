@@ -14,3 +14,50 @@
 2026-05-13T11:11:03.466Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/cancel 400 - Cannot cancel finalized order/n
 2026-05-13T11:11:07.771Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/pay-cash 400 - Order already paid/n
 2026-05-17T10:29:15.247Z [error] [general]: POST /api/category 401 - Not authorized/n
+2026-05-17T13:54:21.404Z [error] [general]: GET /api/order 401 - Invalid token/n
+2026-05-17T13:54:21.408Z [error] [general]: GET /api/order 401 - Invalid token/n
+2026-05-17T13:54:24.808Z [error] [general]: GET /api/order 401 - Invalid token/n
+2026-05-17T13:54:24.810Z [error] [general]: GET /api/order 401 - Invalid token/n
+2026-05-17T14:00:42.990Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T14:01:59.005Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T14:02:08.749Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T15:53:55.697Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T15:53:59.960Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+2026-05-17T16:00:10.825Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:11.361Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:40.668Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:41.202Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:44.424Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:44.953Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:47.548Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:48.083Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:00:49.935Z [info] [inventory]: Stock history requested for product 6a09e1dd1a3136ebc92037c0: 0 records
+2026-05-17T16:00:50.204Z [info] [inventory]: Stock history requested for product 6a09e1dd1a3136ebc92037c0: 0 records
+2026-05-17T16:01:04.099Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:01:04.909Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:01:05.510Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:01:06.050Z [info] [inventory]: Out of stock list requested: 7 records
+2026-05-17T16:01:06.879Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:01:07.501Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:01:42.387Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:01:42.922Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:09.630Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:10.162Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:13.487Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:14.021Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:20.163Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:05:21.665Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:22.619Z [info] [inventory]: Out of stock list requested: 7 records
+2026-05-17T16:05:24.043Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:05:25.126Z [info] [inventory]: Out of stock list requested: 7 records
+2026-05-17T16:05:35.192Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:05:35.560Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:36.130Z [info] [inventory]: Out of stock list requested: 7 records
+2026-05-17T16:05:36.476Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:05:36.817Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:05:37.472Z [info] [inventory]: Out of stock list requested: 7 records
+2026-05-17T16:05:38.408Z [info] [inventory]: Low stock list requested: 7 records
+2026-05-17T16:06:04.154Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:06:04.687Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:06:47.326Z [info] [inventory]: Inventory list requested: 7 records
+2026-05-17T16:06:47.856Z [info] [inventory]: Inventory list requested: 7 records

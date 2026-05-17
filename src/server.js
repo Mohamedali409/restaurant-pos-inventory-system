@@ -1,12 +1,17 @@
-import "dotenv/config.js";
+import "dotenv/config";
 import app from "./app.js";
 import connectDB from "./config/db.js";
 
-const PORT = process.env.PORT;
-// console.log(PORT);
+const PORT = process.env.PORT || 3000;
+
 await connectDB();
 
-// export default app;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// لو شغّال locally
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// export للـ Vercel Serverless
+export default app;
