@@ -10,3 +10,4 @@
 2026-05-13T11:10:57.387Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/complete 400 - Cannot complete finalized order/n
 2026-05-13T11:11:03.466Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/cancel 400 - Cannot cancel finalized order/n
 2026-05-13T11:11:07.771Z [error] [general]: PATCH /api/order/6a045c169363b1221bb6aef9/pay-cash 400 - Order already paid/n
+2026-05-17T10:29:15.247Z [error] [general]: POST /api/category 401 - Not authorized/n
