@@ -17,20 +17,6 @@
 // export default logger;
 
 import winston from "winston";
-
-const isVercel = process.env.VERCEL === "1";
-
-const transports = [
-  new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple(),
-    ),
-  }),
-];
-
-// لو مش على Vercel، اكتب في ملف
-import winston from "winston";
 import fs from "fs";
 
 const isVercel = process.env.VERCEL === "1";
