@@ -23,6 +23,9 @@ app.use(
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/upload", express.static(path.join(__dirname, "../uploads")));
+app.use("/", (req, res, next) => {
+  res.send("بسم الله الرحمن الرحيم");
+});
 
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
