@@ -1,0 +1,151 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0d1b2a, #0a1625);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+}
+
+.closeButton {
+  display: none;
+  border: none;
+  background: transparent;
+  color: #fff;
+  margin-left: auto;
+  margin-bottom: 12px;
+}
+
+.overlay {
+  display: none;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logoCircle {
+  width: 40px;
+  height: 40px;
+  background: #ff6b00;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.logoText {
+  margin-left: 10px;
+}
+
+.logoText h5 {
+  color: #fff;
+  margin: 0;
+  font-size: 16px;
+}
+
+.logoText small {
+  color: #94a3b8;
+}
+
+.userBox {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.userInfo {
+  margin-left: 10px;
+}
+
+.userInfo div {
+  color: #fff;
+}
+
+.userInfo small {
+  color: #94a3b8;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  padding: 10px;
+  color: #cbd5e1;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.menuItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.active {
+  background: #ff6b00;
+  color: #fff;
+}
+
+.icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.bottom {
+  margin-top: 20px;
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1040;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .closeButton {
+    display: inline-flex;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1030;
+  }
+
+  .overlayVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

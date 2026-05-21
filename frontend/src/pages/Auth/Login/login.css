@@ -1,0 +1,58 @@
+.login-page {
+  height: 100vh;
+  background-color: #e9dccb;
+}
+
+.login-card {
+  width: 450px;
+  /* height: 500px; */
+
+  background: #fff;
+  border-radius: 15px;
+}
+
+form{
+    margin-top: 40px;
+}
+.logo {
+
+  background: var(--main-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 10px;
+  font-weight: bold;
+  width: fit-content;
+  padding: 20px;
+  margin-bottom: 20 20px;
+}
+
+.btn-orange {
+  background: #ff5a00;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.btn-orange:hover {
+  background: #e14d00;
+}
+
+.text-orange {
+  color: #ff5a00;
+  cursor: pointer;
+}
+
+input:focus {
+  outline: none;
+  border: 2px solid #ff5a00;
+  box-shadow: none;
+}
+input:active {
+  outline: none;
+  border: 2px solid #ff5a00;
+  box-shadow: none;
+}

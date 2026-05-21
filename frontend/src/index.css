@@ -1,0 +1,56 @@
+:root {
+  --main-color: #ff6900;
+  --secondary-color: #f54a00;
+  --therd-color: #1e2939;
+  --color-green: #008236;
+  --bg-green: #dcfce7;
+}
+
+.auhLayout {
+  background: #ebb15b;
+  background: linear-gradient(196deg, rgba(235, 177, 91, 1) 54%, rgba(255, 247, 237, 1) 100%);
+}
+
+.form-control:focus {
+  border-color: var(--main-color);
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem var(--main-color);
+  box-shadow: none;
+}
+
+/** Custom Css */
+.fs-14 {
+  font-size: 14px;
+}
+
+.btn-orange {
+  background: #ff5a00;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.btn-orange:hover {
+  background: #e14d00;
+  color: #ccc;
+}
+.bg-orange {
+  background: #e14d00 !important;
+}
+.text-orange {
+  color: #ff5a00;
+  cursor: pointer;
+}
+
+.active {
+  background: #ff6b00;
+  color: #fff;
+}
+
+
+.modal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}

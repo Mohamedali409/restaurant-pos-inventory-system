@@ -1,0 +1,55 @@
+.register-page {
+  min-height: 100vh;
+  background-color: #e9dccb;
+  padding: 20px 12px;
+}
+
+.register-card {
+  width: min(450px, 100%);
+  background: #fff;
+  border-radius: 15px;
+}
+
+.authContent {
+  width: min(450px, 100%);
+}
+
+form {
+  margin-top: 28px;
+}
+
+.logo {
+  background: var(--main-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 10px;
+  font-weight: bold;
+  width: fit-content;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+input:focus {
+  outline: none;
+  border: 2px solid #ff5a00;
+  box-shadow: none;
+}
+input:active {
+  outline: none;
+  border: 2px solid #ff5a00;
+  box-shadow: none;
+}
+
+@media (max-width: 576px) {
+  .register-card {
+    border-radius: 12px;
+    padding: 20px 16px !important;
+  }
+
+  form {
+    margin-top: 20px;
+  }
+}

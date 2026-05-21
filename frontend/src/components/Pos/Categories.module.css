@@ -1,0 +1,30 @@
+.list {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: none;
+  background: #f1f1f1;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  color: #374151;
+}
+
+.pill:hover {
+  background: #e5e7eb;
+}
+
+.active {
+  background: #ff5a00;
+  color: #fff;
+}
+
+.active:hover {
+  background: #e04e00;
+}
