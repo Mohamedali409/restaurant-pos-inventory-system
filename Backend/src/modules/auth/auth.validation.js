@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const registerValidation = [
+export const registerValidation = () => [
   body("name")
     .trim()
     .notEmpty()
@@ -13,8 +13,7 @@ export const registerValidation = [
     .notEmpty()
     .withMessage("Email is required")
     .isEmail()
-    .withMessage("Please provide a valid email")
-    .normalizeEmail(),
+    .withMessage("Please provide a valid email"),
 
   body("password")
     .notEmpty()
@@ -23,19 +22,18 @@ export const registerValidation = [
     .withMessage("Password must be at least 6 characters"),
 ];
 
-export const loginValidation = [
+export const loginValidation = () => [
   body("email")
     .trim()
     .notEmpty()
     .withMessage("Email is required")
     .isEmail()
-    .withMessage("Please provide a valid email")
-    .normalizeEmail(),
+    .withMessage("Please provide a valid email"),
 
   body("password").notEmpty().withMessage("Password is required"),
 ];
 
-export const forgotPasswordValidation = [
+export const forgotPasswordValidation = () => [
   body("email")
     .trim()
     .notEmpty()
@@ -44,7 +42,7 @@ export const forgotPasswordValidation = [
     .withMessage("Please provide a valid email"),
 ];
 
-export const resetPasswordValidation = [
+export const resetPasswordValidation = () => [
   body("password")
     .notEmpty()
     .withMessage("Password is required")

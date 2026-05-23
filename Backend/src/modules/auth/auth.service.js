@@ -37,7 +37,7 @@ export const loginUser = async (email, password) => {
 
   const isMatch = await user.comparePassword(password);
 
-  if (!isMatch) throw new AppError("Invalid Login");
+  if (!isMatch) throw new AppError("Invalid email or password", 401);
 
   const token = generateToken(user);
 

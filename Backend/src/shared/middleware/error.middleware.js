@@ -9,7 +9,7 @@ export const errorHandling = async (err, req, res, next) => {
 
   res.status(statusCode).json({
     success: false,
-    message: "error message",
+    message: err.message || "Internal Server Error",
     error: err.message,
   });
 };

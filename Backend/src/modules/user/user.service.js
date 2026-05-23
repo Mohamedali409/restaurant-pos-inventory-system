@@ -14,14 +14,9 @@ import AppError from "../../shared/utils/AppError.js";
 
 //                   ---------> Admin with user (manager and cashier) <---------
 const createUser = async (userData) => {
-  if (!mongoose.Types.ObjectId.isValid(userData._id)) {
-    throw new AppError("Invalid user id", 400);
-  }
-
-  const user = await userRepository.findUserById(userData._id);
-
-  if (user) {
-    throw new AppError("This user used before", 400);
+  const existingUser = await userRepository.getUserByEmail(userData.email);
+  if (existingUser) {
+    throw new AppError("This email is already in use", 409);
   }
 
   const newUser = await userRepository.createUser(userData);
