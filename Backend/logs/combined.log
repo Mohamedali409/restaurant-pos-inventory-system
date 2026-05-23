@@ -61,3 +61,4 @@
 2026-05-17T16:06:04.687Z [info] [inventory]: Inventory list requested: 7 records
 2026-05-17T16:06:47.326Z [info] [inventory]: Inventory list requested: 7 records
 2026-05-17T16:06:47.856Z [info] [inventory]: Inventory list requested: 7 records
+{"level":"error","message":"POST /api/auth/register 409 - email is already used/n","timestamp":"2026-05-21T06:56:07.762Z"}

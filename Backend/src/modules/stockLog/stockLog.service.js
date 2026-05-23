@@ -1,8 +1,11 @@
-// وظيفته:
-// تسجيل كل حركة في المخزون
+import * as stockLogRepository from "./stockLog.repository.js";
 
-// ❗ مفيهوش routes مباشر غالبًا
-// بيتستخدم جوه order & inventory
+const createStockLogService = async (data) => {
+  return stockLogRepository.createStockLog(data);
+};
 
-// createStockLogService
-// getStockLogsService
+const getStockLogsService = async (filter = {}) => {
+  return stockLogRepository.findStockLogs(filter);
+};
+
+export { createStockLogService, getStockLogsService };

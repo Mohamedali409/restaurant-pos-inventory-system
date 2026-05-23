@@ -13,7 +13,8 @@ import asyncHandler from "../../shared/utils/asyncHandler.js";
 import * as OrderService from "./order.service.js";
 
 const createOrder = asyncHandler(async (req, res) => {
-  const orderData = req.body;
+  // ✅ إضافة cashierId من الـ token تلقائياً
+  const orderData = { ...req.body, cashierId: req.user.id };
 
   const newOrder = await OrderService.createOrderService(orderData);
 
@@ -59,7 +60,7 @@ const changeOrderStatus = asyncHandler(async (req, res) => {
 const updateOrder = asyncHandler(async (req, res) => {
   const { orderId } = req.params;
 
-  const orderUpdated = await OrderService.updateOrderService(orderId);
+  const orderUpdated = await OrderService.updateOrderService(orderId, req.body);
 
   res.status(200).json({
     success: true,

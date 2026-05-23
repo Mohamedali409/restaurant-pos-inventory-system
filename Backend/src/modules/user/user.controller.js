@@ -57,7 +57,8 @@ const getAllUserByRole = asyncHandler(async (req, res) => {
 });
 
 const updateUserData = asyncHandler(async (req, res) => {
-  const userUpdated = await userService.updateUser(req.body);
+  const { userId } = req.params;
+  const userUpdated = await userService.updateUser(userId, req.body);
 
   res.status(200).json({
     success: true,
@@ -67,7 +68,8 @@ const updateUserData = asyncHandler(async (req, res) => {
 });
 
 const deleteUserData = asyncHandler(async (req, res) => {
-  await userService.deleteUser(req.body);
+  const { userId } = req.params;
+  await userService.deleteUser(userId);
 
   res.status(200).json({
     success: true,
@@ -86,7 +88,7 @@ const getCounterOrder = asyncHandler(async (req, res) => {
 });
 
 const getSumSales = asyncHandler(async (req, res) => {
-  const sumSales = await userService.getsumSales();
+  const sumSales = await userService.getSumSales();
 
   res.status(200).json({
     success: true,

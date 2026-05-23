@@ -6,12 +6,10 @@ const PORT = process.env.PORT || 3000;
 
 await connectDB();
 
-// لو شغّال locally
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
-// export للـ Vercel Serverless
 export default app;

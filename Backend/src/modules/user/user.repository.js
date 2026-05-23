@@ -33,8 +33,13 @@ const deleteUser = (userId) => {
 const getUserByEmail = (email) => {
   return User.findOne({ email });
 };
+
 const getUserByEmailAndSelectPassword = (email) => {
   return User.findOne({ email }).select("-password");
+};
+
+const getUserByRole = (role) => {
+  return User.find({ role });
 };
 
 export {
@@ -46,4 +51,5 @@ export {
   deleteUser,
   getUserByEmail,
   getUserByEmailAndSelectPassword,
+  getUserByRole,
 };

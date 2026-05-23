@@ -13,7 +13,7 @@ export const getCategoriesService = async () => {
 
   if (!category) throw new AppError("Don't have Category ");
 
-  return category;
+  return createCategory;
 };
 
 export const createCategoryService = async (data) => {
@@ -25,7 +25,7 @@ export const createCategoryService = async (data) => {
 
   if (!createCategory) throw new AppError(MESSAGES.CANT_CREATE_CATEGORY, 400);
 
-  return category;
+  return createCategory;
 };
 
 export const updateCategoryService = async (categoryId, data) => {
@@ -56,5 +56,5 @@ export const getCategoryByIdService = async (categoryId) => {
 
   if (!category) throw new AppError(MESSAGES.CANT_FIND_CATEGORY, 404);
 
-  return category;
+  return createCategory;
 };

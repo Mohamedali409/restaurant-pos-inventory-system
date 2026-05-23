@@ -20,3 +20,4 @@
 2026-05-17T14:02:08.749Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
 2026-05-17T15:53:55.697Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
 2026-05-17T15:53:59.960Z [error] [general]: POST /api/auth/login 401 - Invalid email or password/n
+{"level":"error","message":"POST /api/auth/register 409 - email is already used/n","timestamp":"2026-05-21T06:56:07.762Z"}
