@@ -1,0 +1,95 @@
+name: PR — Quality Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # ─── Validate PR title follows Conventional Commits ────────────────────
+  pr-title:
+    name: 📝 Check PR Title
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📝 Validate PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            test
+            chore
+            perf
+          requireScope: false
+
+  # ─── Run Tests on PR ───────────────────────────────────────────────────
+  test-on-pr:
+    name: 🧪 Tests on PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests with coverage
+        run: npm test -- --coverage
+        env:
+          NODE_ENV: test
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: 💬 Comment coverage on PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## 🧪 Test Results\n\n';
+            try {
+              const summary = fs.readFileSync('coverage/coverage-summary.json', 'utf8');
+              const cov = JSON.parse(summary).total;
+              body += `| Metric | Coverage |\n|--------|----------|\n`;
+              body += `| Lines | ${cov.lines.pct}% |\n`;
+              body += `| Statements | ${cov.statements.pct}% |\n`;
+              body += `| Functions | ${cov.functions.pct}% |\n`;
+              body += `| Branches | ${cov.branches.pct}% |\n`;
+            } catch(e) {
+              body += '⚠️ Coverage report not available\n';
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+  # ─── Check for secrets accidentally committed ──────────────────────────
+  secret-scan:
+    name: 🔐 Scan for Secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # كل الـ history عشان نفحص كل الـ commits
+
+      - name: 🔐 Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
