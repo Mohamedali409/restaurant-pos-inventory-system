@@ -1,0 +1,31 @@
+name: 🔄 Dependency Update Check
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # كل يوم الاثنين الساعة 9 صباحاً
+  workflow_dispatch: # أو يدوياً من GitHub UI
+
+jobs:
+  check-updates:
+    name: 🔄 Check for Updates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - name: 📦 Install npm-check-updates
+        run: npm install -g npm-check-updates
+
+      - name: 🔍 Check outdated packages
+        run: ncu --format group
+
+      - name: 🔒 Security audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
